@@ -76,6 +76,7 @@ function checkDisplay(items){
 }
 
 function guess() {
+    const letters = document.querySelectorAll(".word-letter");
     if(hp > 1){
         let guessLetter = this.textContent;
         if(!chosenWord.includes(guessLetter)){
@@ -83,8 +84,7 @@ function guess() {
             lives.textContent = `You have ${hp} lives.`;
             this.classList.add("disabled");
         } else {
-            this.classList.add("correct")
-            const letters = document.querySelectorAll(".word-letter");
+            this.classList.add("correct");       
             letters.forEach(el => {
                 if(el.textContent == guessLetter){
                     el.classList.add("display");
@@ -95,6 +95,11 @@ function guess() {
     } else {
         lives.textContent = `You lost! Better luck next time!`;
         disableKeys();
+        letters.forEach(el => {
+            if(!el.classList.contains("display")) {
+                el.classList.add("remaining");
+            }
+        })
     }
 }
 
