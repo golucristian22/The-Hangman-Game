@@ -3,26 +3,34 @@
 // Selecting
 const wordsContainer = document.querySelector(".word-container");
 const lives = document.querySelector(".lives");
-
 const keyboard = document.querySelector(".keyboard");
 const reset = document.querySelector(".reset");
 
+const category = document.getElementById("category");
+
 // Starting
-let letter = "";
+let finalWord;
 let alphabet = ["a", "b", "c" ,"d", "e", "f", "g" ,"h", "i", "j", "k", "l", "m", "n" ,"o" , "p", "q", "r", "s" ,"t" ,"u" ,"v" ,"w" ,"x" , "y" ,"z"];
 let hp = 10;
 lives.textContent = `You have ${hp} lives.`;
 
-const words = ["tokyo", "delhi", "shanghai", "paris", "berlin", "rome", "cairo", "dhaka", "mumbai", "beijing", "osaka", "milan", "athens", "munich", "rotterdam", "hamburg",
+const animalsWords = ["alligator", "ano", "fox", "hare", "wolf", "armadillo", "elephant", "bear", "dog", "cat", "baboon", "buffalo", "mastiff", "shark", "terrier", "bulldog",
+ "bullfrog", "bee", "butterfly", "caiman", "lizzard", "camel", "capybara", "caracal", "cassowary", "donkey", "drever", "duck", "dunker", "dugong", "eagle", "earwig", "gorilla", 
+ "seal", "penguin", "tamarin", "fish", "flamingo", "flounder", "squirrel", "cichild", "chipmunk", "chinchilla", "cimpanzee", "chihuahua", "chicken", "owl", "avocet"];
+
+const citiesWords = ["tokyo", "delhi", "shanghai", "paris", "berlin", "rome", "cairo", "dhaka", "mumbai", "beijing", "osaka", "milan", "athens", "munich", "rotterdam", "hamburg",
  "barcelona", "vienna", "prague", "copenhagen", "budapest", "madrid", "lisbon", "bucharest", "warsaw", "london", "valencia", "seville", "lyon", "wroclaw", "krakow", "dublin",
-  "cologne", "riga", "turin", "genoa", "palermo", "belgrade", "marseille", "zagreb", "sofia", "bilbao", "stockholm", "helsinki", "amsterdam", "bremen", "hanover", "kyiv",
-   "minsk", "naples", "zaragoza", "vilnius", "frankfurt", "florence"];
-let chosenWord;
-let choseWord = () => {
-    chosenWord = [...words[Math.floor(Math.random()*words.length)]];
-    console.log(chosenWord);
-};
-choseWord();
+"cologne", "riga", "turin", "genoa", "palermo", "belgrade", "marseille", "zagreb", "sofia", "bilbao", "stockholm", "helsinki", "amsterdam", "bremen", "hanover", "kyiv",
+"minsk", "naples", "zaragoza", "vilnius", "frankfurt", "florence"];
+
+const clothesWords = ["tshirt", "sweater", "jacket", "coat", "jeans", "socks", "shorts", "tracksuit", "vest", "pajamas", "shoes", "boots", "raincoat", "tanktop", "swimsuit", 
+"skirt", "dress", "heels", "blouse", "bra", "panties", "stockings", "suit", "shirt", "tie", "bowtie", "briefs", "scarft", "belt", "handkerchief", "necklace", "purse", "hat", "cap", 
+"watch", "shawl"];
+
+const foodWords = ["nigiri", "sarma", "pizza", "yogurt", "eclair", "bruschetta", "churros", "soup", "milkshake", "tiramisu", "penne", "macaroni", "baguette", "egg", "doughnut",
+"quesadilla", "guacamole", "hummus", "wasabi", "burrito", "pasta", "nachos", "brownies", "ricotta", "lasagna", "cheddar", "barbecue", "cheeseburger", "mozzarella", "spaghetti",
+"tortilla", "croissant", "tofu", "noodles", "ramen", "tacos", "burger", "sushi", "salad", "sandwich", "bread", "steak", "fish", "rice", "cheese", "sausages", "milk", "cookie", "pie",
+"cupcake", "shrimp"];
 
 // General Functions
 function disableKeys(){
@@ -45,11 +53,10 @@ function removeWord() {
     })
 }
 
-
 // Generate Random Word Container
-function finalWord(word) {
+function createRandomWord(word) {
     for (let wordContainer of word) {
-        letter = document.createTextNode(`${wordContainer}`);;
+        let letter = document.createTextNode(`${wordContainer}`);;
         let letterContainer = document.createElement("p");
         letterContainer.classList.add("word-letter");
         letterContainer.appendChild(letter)
@@ -61,6 +68,25 @@ function finalWord(word) {
     }
 }
  
+let choseWord = function(categoryName){
+    let chosenWord = [...categoryName[Math.floor(Math.random()*categoryName.length)]];
+    finalWord = chosenWord;
+    console.log(chosenWord);
+    createRandomWord(chosenWord);
+};
+
+function setCategory() {
+    removeWord();
+    let categoryValue = category.value;
+    console.log(categoryValue);
+    if(categoryValue == "animals") categoryValue = animalsWords;
+    else if(categoryValue == "cities") categoryValue = citiesWords;
+    else if(categoryValue == "clothes") categoryValue = clothesWords;
+    else if(categoryValue == "food") categoryValue = foodWords;
+
+    choseWord(categoryValue);
+}
+
 // Guess Mechanics
 function checkDisplay(items){
     let itemLetter = items.length;
@@ -79,7 +105,7 @@ function guess() {
     const letters = document.querySelectorAll(".word-letter");
     if(hp > 1){
         let guessLetter = this.textContent;
-        if(!chosenWord.includes(guessLetter)){
+        if(!finalWord.includes(guessLetter)){
             hp--;
             lives.textContent = `You have ${hp} lives.`;
             this.classList.add("disabled");
@@ -103,6 +129,7 @@ function guess() {
     }
 }
 
+
 // Create Keys
 function createKeys(keys) {
     for(let key of keys){
@@ -119,13 +146,10 @@ function createKeys(keys) {
 
 // Reset Button 
 reset.addEventListener("click", () => {
-    removeWord();
+    setCategory();
     hp = 10;
     lives.textContent = `You have ${hp} lives.`;
-    choseWord();
-    finalWord(chosenWord);
     enableKeys();
 })
 
-finalWord(chosenWord);
 createKeys(alphabet);

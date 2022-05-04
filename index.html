@@ -11,13 +11,23 @@
     <div class="container">
         <h1>Hangman</h1>
         <h2>Made by Golu Cristian using Vanilla JavaScript</h2>
+        <div class="category-container">
+            <label for="name">Category:</label>
+            <select name="category" id="category" onchange="setCategory()">
+                <option disabled selected>-Please choose a category-</option>
+                <option value="animals">Animals</option>
+                <option value="cities">Cities</option>
+                <option value="clothes">Clothes</option>
+                <option value="food">Food</option>
+            </select>
+        </div>
         <div class="word-container">
         </div>
         <div class="lives">You have 5 lives.</div>
         <div class="keyboard">
         </div>
         <div class="reset">
-            <button class="btn">Reset</button>
+            <button class="btn btn--reset">Reset</button>
         </div>
     </div>
 </body>
